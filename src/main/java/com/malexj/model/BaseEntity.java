@@ -1,9 +1,10 @@
 package com.malexj.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @Id
     @SequenceGenerator(name = "store_sequence", sequenceName = "store_sequence", allocationSize = 1)
