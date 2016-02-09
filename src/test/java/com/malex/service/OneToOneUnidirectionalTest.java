@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -25,7 +26,7 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfigTest.class})
 @WebAppConfiguration
-public class OneToOneUnidirectionalTest {
+public class OneToOneUnidirectionalTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private DepartmentService departmentService;
@@ -35,7 +36,7 @@ public class OneToOneUnidirectionalTest {
 
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testCreateWorkerAddDepartment_01() {
 
         /**
@@ -62,7 +63,7 @@ public class OneToOneUnidirectionalTest {
     }
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testCreateWorkerAddDepartment_02() {
 
         /**
@@ -84,7 +85,7 @@ public class OneToOneUnidirectionalTest {
     }
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testCreateWorkerAddDepartment_03() {
 
         /**
@@ -110,7 +111,7 @@ public class OneToOneUnidirectionalTest {
     }
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testCreateWorkerAddDepartment_04() {
 
         /**
@@ -160,7 +161,7 @@ public class OneToOneUnidirectionalTest {
         System.err.println(worker_04);
         assertNotNull(worker_04);
         assertEquals(worker.getName(), worker_04.getName());
-        //TODO !!!! 3 x Department
+        //TODO !!!! 2 x Department
         System.err.println(departmentService.findAll());
     }
 
@@ -200,7 +201,7 @@ public class OneToOneUnidirectionalTest {
 
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testDeleteWorker_01() {
 
         /**
@@ -254,13 +255,13 @@ public class OneToOneUnidirectionalTest {
         System.err.println(workerList);
         System.err.println(departmentList);
         assertTrue(workerList.isEmpty());
-        //TODO !!!! 3 x Department
+        //TODO !!!! 2 x Department
         assertTrue(departmentList.isEmpty());
     }
 
 
     @Test
-    @Rollback(value = false)
+    @Rollback
     public void testDeleteWorker_02() {
 
         /**
