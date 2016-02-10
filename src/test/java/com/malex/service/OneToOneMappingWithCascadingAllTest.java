@@ -79,7 +79,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         cat.setName("Myrrr" + new Random().nextInt(100));
         Cat cat_01 = catService.save(cat);
 
-
         //when
         Cat expectCat = catService.findById(cat_01.getId());
         System.err.println(expectCat.getId());
@@ -90,7 +89,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         expectCat.setBreed(breed);
 
         Cat actualCat = catService.update(expectCat);
-
 
         // then
         System.err.println(actualCat.getId());
@@ -107,7 +105,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         Cat cat = new Cat();
         cat.setName("Myrrr" + new Random().nextInt(100));
         Cat cat_01 = catService.save(cat);
-
 
         //when
         Cat expectCat_01 = catService.findById(cat_01.getId());
@@ -126,7 +123,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         expectCat_03.setBreed(breed_02);
         Cat actualCat_04 = catService.update(expectCat_03);
 
-
         Cat expectCat_05 = catService.findById(actualCat_04.getId());
         System.err.println(expectCat_05.getId());
         Breed breed_03 = new Breed();
@@ -134,7 +130,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         breed_03.setState("Xsdhdfshxx");
         expectCat_05.setBreed(breed_03);
         Cat actualCat = catService.update(expectCat_05);
-
 
         // then
         System.err.println(actualCat.getId());
@@ -163,7 +158,6 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         System.err.println(actualCat);
         System.err.println(breedService.findAll());
         assertNotNull(actualCat);
-
     }
 
     @Test
@@ -223,14 +217,11 @@ public class OneToOneMappingWithCascadingAllTest extends AbstractTransactionalJU
         catServiceById.setBreed(breedServiceById);
         Cat catSave = catService.save(catServiceById);
 
-
         // then
         Cat resultCat = catService.findById(catSave.getId());
 
         assertEquals(resultCat.getId(), catServiceById.getId());
         assertEquals(resultCat.getBreed().getId(), breedServiceById.getId());
         System.err.println(catSave);
-
     }
-
 }
