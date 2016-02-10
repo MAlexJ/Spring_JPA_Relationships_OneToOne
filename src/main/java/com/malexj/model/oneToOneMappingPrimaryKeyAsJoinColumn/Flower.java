@@ -1,24 +1,24 @@
-package com.malexj.model.oneToOneMappingBidirectional;
+package com.malexj.model.oneToOneMappingPrimaryKeyAsJoinColumn;
 
 import com.malexj.model.BaseEntity;
 
 import javax.persistence.*;
 
 /**
- * Created by malex on 09.02.16.
+ * Created by malex on 10.02.16.
  */
 
 @Entity
-@Table(name = "dog_house")
-public class DogHouse extends BaseEntity{
+@Table(name = "flower")
+public class Flower extends BaseEntity {
 
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "house")
-    private Dog dog;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "flower1")
+    private Pot pot;
 
-    public DogHouse() {
+    public Flower() {
     }
 
     public String getName() {
@@ -29,12 +29,12 @@ public class DogHouse extends BaseEntity{
         this.name = name;
     }
 
-    public Dog getDog() {
-        return dog;
+    public Pot getPot() {
+        return pot;
     }
 
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setPot(Pot pot) {
+        this.pot = pot;
     }
 
     @Override
@@ -42,25 +42,25 @@ public class DogHouse extends BaseEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DogHouse dogHouse = (DogHouse) o;
+        Flower flower = (Flower) o;
 
-        if (name != null ? !name.equals(dogHouse.name) : dogHouse.name != null) return false;
-        return dog != null ? dog.equals(dogHouse.dog) : dogHouse.dog == null;
+        if (name != null ? !name.equals(flower.name) : flower.name != null) return false;
+        return pot != null ? pot.equals(flower.pot) : flower.pot == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (dog != null ? dog.hashCode() : 0);
+        result = 31 * result + (pot != null ? pot.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "DogHouse{" +
+        return "Flower{" +
                 "name='" + name + '\'' +
-                ", dog=" + dog +
+                ", pot=" + pot +
                 '}';
     }
 }

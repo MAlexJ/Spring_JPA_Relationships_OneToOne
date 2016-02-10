@@ -1,5 +1,6 @@
 package com.malex.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +47,7 @@ public class JPAConfigTest {
     @Value("${data.entity.package}")
     private String packagesToScan;
 
-    @Bean
+    @Autowired
     public DataSource dataSource() {
         DriverManagerDataSource source = new DriverManagerDataSource();
         source.setDriverClassName(driver);
