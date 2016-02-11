@@ -68,10 +68,11 @@ public class Employee extends BaseEntity {
 
     @Override
     public String toString() {
+
         return "Employee{" +
-                "name='" + name + '\'' +
-                ", userName='" + userName + '\'' +
-                ", bank=" + bank +
-                '}';
+                "name='" + name +
+                ", userName='" + userName +
+                (bank != null ? ", bank=" + bank.getName() : " ")
+                + '}';
     }
 }

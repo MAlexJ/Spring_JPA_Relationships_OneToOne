@@ -58,7 +58,7 @@ public class Bank extends BaseEntity {
     public String toString() {
         return "Bank{" +
                 "name='" + name + '\'' +
-                ", employee=" + employee +
+               // ", employee=" + employee +
                 '}';
     }
 }
