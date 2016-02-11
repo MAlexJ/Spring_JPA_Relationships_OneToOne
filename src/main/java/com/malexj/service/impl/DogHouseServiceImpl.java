@@ -4,12 +4,15 @@ import com.malexj.model.oneToOneMappingBidirectional.DogHouse;
 import com.malexj.repository.DogHouseRepository;
 import com.malexj.service.DogHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by malex on 10.02.16.
  */
+
+@Service
 public class DogHouseServiceImpl implements DogHouseService {
 
     @Autowired

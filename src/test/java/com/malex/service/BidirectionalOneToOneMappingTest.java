@@ -26,7 +26,7 @@ import static junit.framework.TestCase.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfigTest.class})
 @WebAppConfiguration
-public class BidirectionalOneToOneMapping extends AbstractTransactionalJUnit4SpringContextTests {
+public class BidirectionalOneToOneMappingTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private BankService bankService;
