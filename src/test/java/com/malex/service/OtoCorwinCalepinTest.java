@@ -15,8 +15,11 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.List;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created by malex on 11.02.16.
@@ -108,6 +111,13 @@ public class OtoCorwinCalepinTest extends AbstractTransactionalJUnit4SpringConte
          * InvalidDataAccessApiUsageException:
          * object references an unsaved transient instance -
          * save the transient instance before flushing :Engine.car -> Car
+         *
+         * Но если поставить со стороны Engine -> cascade = {CascadeType.PERSIST} ВСЕ ОК!!!!!
+         *
+         public class Engine extends BaseEntity {
+
+        @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+        private Car car;
          * */
 
         //given
@@ -121,6 +131,7 @@ public class OtoCorwinCalepinTest extends AbstractTransactionalJUnit4SpringConte
         //when
         Engine expectEngine = engineService.save(engine);                         // Engine -> RDBMS
         printLog(expectEngine, "Engine -> RDBMS");
+        printLog(expectEngine.getCar());
         // then
 
         assertNotNull(expectEngine);
@@ -136,12 +147,12 @@ public class OtoCorwinCalepinTest extends AbstractTransactionalJUnit4SpringConte
         //given
         Car car = new Car();
         car.setName("AUDI");
-        Car expectCar_01 = carService.save(car);                                     // CAR -> RDBMS
+        Car expectCar_01 = carService.save(car);                                    // CAR -> RDBMS
         printLog(expectCar_01, "CAR -> RDBMS");
 
         Engine engine = new Engine();
         engine.setName("2000S");
-        Engine expectEngine = engineService.save(engine);                         // Engine -> RDBMS
+        Engine expectEngine = engineService.save(engine);                          // Engine -> RDBMS
         printLog(expectEngine, "Engine -> RDBMS");
 
         //when
@@ -183,11 +194,123 @@ public class OtoCorwinCalepinTest extends AbstractTransactionalJUnit4SpringConte
 
     @Test
     @Rollback
-    public void test() {
+    public void testDelete_01() {
+        /**
+         *
+         1. Создал CAR
+         2. Создал ENGINE, вложал Car в ENGINE и создалась полная связь между сущностями.
+         3. Пытаюсь удалить CAR но не дает -> PSQLException: ERROR: update or delete on table "car" violates foreign key constraint "fk_14nq6bihc8ky2fjtchv60adjn" on table "engine"
+         * */
 
         //given
+        Car car = new Car();
+        car.setName("AUDI");
+        Car actualCar = carService.save(car);
+
+        Engine engine = new Engine();
+        engine.setName("2000S");
+        engine.setCar(actualCar);
+
+        //full table
+        Engine expectEngine = engineService.save(engine);                               // Engine -> RDBMS
+        printLog(expectEngine, "Engine -> RDBMS");
+        printLog(expectEngine.getCar());
+
         //when
+        Car carServiceDelete = carService.findById(actualCar.getId());
+        printLog(carServiceDelete);
+        printLog(carServiceDelete.getEngine());
+
+        carService.delete(carServiceDelete.getId());
+
+
         // then
+        List<Car> carList = carService.findAll();
+        List<Engine> engineList = engineService.findAll();
+        assertEquals(carList.size(), 0);
+        assertEquals(engineList.size(), 0);
+        assertTrue(carList.isEmpty());
+        assertTrue(engineList.isEmpty());
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void testDelete_02() {
+        /**
+         *
+         1. Создал CAR
+         2. Создал ENGINE, вложал Car в ENGINE и создалась полная связь между сущностями.
+         3. Пытаюсь удалить ENGINE текущей сушности Car -> NullPointerException
+         Так как вытянуьб  двигатель у машины не получаеться!!!!!!!!!!!
+         * */
+
+        //given
+        Car car = new Car();
+        car.setName("AUDI");
+        Car actualCar = carService.save(car);
+        printLog(actualCar, "Car -> RDBMS");
+
+        Engine engine = new Engine();
+        engine.setName("2000S");
+        engine.setCar(actualCar);
+
+        //full table
+        Engine expectEngine = engineService.save(engine);                               // Engine -> RDBMS
+        printLog(expectEngine, "Engine -> RDBMS");
+        printLog(expectEngine.getCar());
+
+        //when
+        Car carServiceById = carService.findById(actualCar.getId());                    // RDBMS -> Car"
+        printLog(carServiceById, "RDBMS -> Car");
+        System.err.println(carServiceById.getEngine());
+        printLog(carServiceById.getEngine());
+
+        Car actualCar_02 = carService.findById(actualCar.getId());
+        Engine actualEngine_02 = actualCar_02.getEngine();
+        engineService.delete(actualEngine_02.getId());
+
+        // then
+        List<Car> carList = carService.findAll();
+        assertEquals(carList.size(), 1);
+        assertTrue(!carList.isEmpty());
+
+        List<Engine> engineList = engineService.findAll();
+        assertEquals(engineList.size(), 0);
+        assertTrue(engineList.isEmpty());
+    }
+
+
+    @Test
+    @Rollback(value = false)
+    public void testDelete_0_1() {
+        //given
+        Engine engine = new Engine();
+        engine.setName("2000S");
+
+        Car car = new Car();
+        car.setName("AUDI");
+        car.setEngine(engine);
+
+        Car expectCar_01 = carService.save(car);                                     // CAR -> RDBMS
+        printLog(expectCar_01, "CAR -> RDBMS");
+        printLog(expectCar_01.getEngine());
+        //when
+        engineService.delete(expectCar_01.getEngine().getId());
+
+
+        // then
+        List<Car> carList = carService.findAll();
+        List<Engine> engineList = engineService.findAll();
+        assertEquals(carList.size(), 1);
+        assertEquals(engineList.size(), 1);
+        assertTrue(!carList.isEmpty());
+        assertTrue(!engineList.isEmpty());
+    }
+
+    @Test
+    @Rollback
+    public void test() {
+
 
     }
 
