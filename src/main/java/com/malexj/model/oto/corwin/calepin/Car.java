@@ -18,8 +18,7 @@ public class Car extends BaseEntity {
     @OneToOne(mappedBy = "car", cascade = CascadeType.ALL)
     private Engine engine;
 
-    public Car(String name) {
-        this.name = name;
+    public Car() {
     }
 
     public String getName() {
