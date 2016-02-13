@@ -1,0 +1,18 @@
+CREATE TABLE accounts
+(
+    id BIGINT PRIMARY KEY NOT NULL,
+    name VARCHAR(255),
+    user_id BIGINT,
+    CONSTRAINT fk_e4w4av1wrhanry7t6mxt42nou FOREIGN KEY (user_id) REFERENCES users (id)
+);
+CREATE UNIQUE INDEX uk_e4w4av1wrhanry7t6mxt42nou ON accounts (user_id);
+
+
+CREATE TABLE users
+(
+    id BIGINT PRIMARY KEY NOT NULL,
+    name VARCHAR(255),
+    account_id BIGINT,
+    CONSTRAINT fk_1yov8c5ew74vlt8qra6cewq99 FOREIGN KEY (account_id) REFERENCES accounts (id)
+);
+CREATE UNIQUE INDEX uk_1yov8c5ew74vlt8qra6cewq99 ON users (account_id);

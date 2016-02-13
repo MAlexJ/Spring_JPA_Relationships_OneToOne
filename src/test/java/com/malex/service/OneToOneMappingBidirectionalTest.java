@@ -33,7 +33,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
     private DogService dogService;
 
     @Autowired
-    private DogHouseService dogHouseService;
+    private DogHouseService houseService;
 
 
     @Test
@@ -59,7 +59,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         dogHouse.setName("House");
 
         //when
-        DogHouse actualDogHouse = dogHouseService.save(dogHouse);          // 2->RDBMS
+        DogHouse actualDogHouse = houseService.save(dogHouse);          // 2->RDBMS
         printLog(dogHouse, "2->RDBMS");
 
         // then
@@ -81,7 +81,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         Dog actualDog = dogService.save(dog);                                   // 1->RDBMS
         printLog(actualDog, "1->RDBMS");
 
-        DogHouse actualDogHouse = dogHouseService.save(dogHouse);                // 2->RDBMS
+        DogHouse actualDogHouse = houseService.save(dogHouse);                // 2->RDBMS
         printLog(actualDogHouse, "2->RDBMS");
 
         // then
@@ -95,7 +95,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         //given
         DogHouse house = new DogHouse();
         house.setName("HouseW");
-        DogHouse actualHouse = dogHouseService.save(house);                // 2->RDBMS
+        DogHouse actualHouse = houseService.save(house);                // 2->RDBMS
         printLog(actualHouse, "2->RDBMS");
 
         Dog dog = new Dog();
@@ -105,7 +105,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
 
         //when
         Dog actualDog_01 = dogService.findById(actualDog.getId());                 // RDBMS->1
-        DogHouse actualHouse_01 = dogHouseService.findById(actualHouse.getId());   // RDBMS->2
+        DogHouse actualHouse_01 = houseService.findById(actualHouse.getId());   // RDBMS->2
         actualDog_01.setHouse(actualHouse_01);                                     // 2->1
         Dog actualDog_02 = dogService.update(actualDog_01);                        // 1->RDBMS
         printLog(actualDog_02, "1->RDBMS");
@@ -113,7 +113,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         // then
         assertNotNull(actualDog_02);
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         //given
         DogHouse house = new DogHouse();
         house.setName("HouseW");
-        DogHouse actualHouse = dogHouseService.save(house);                // 2->RDBMS
+        DogHouse actualHouse = houseService.save(house);                // 2->RDBMS
         printLog(actualHouse, "2->RDBMS");
 
         Dog dog = new Dog();
@@ -132,16 +132,16 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
 
         //when
         Dog actualDog_01 = dogService.findById(actualDog.getId());                 // RDBMS->1
-        DogHouse actualHouse_01 = dogHouseService.findById(actualHouse.getId());   // RDBMS->2
+        DogHouse actualHouse_01 = houseService.findById(actualHouse.getId());   // RDBMS->2
         actualHouse_01.setDog(actualDog_01);                                       // 1->2
-        DogHouse actualHouse_011 = dogHouseService.update(actualHouse_01);        // 2->RDBMS
+        DogHouse actualHouse_011 = houseService.update(actualHouse_01);        // 2->RDBMS
         printLog(actualHouse_011, "1->RDBMS");
         printLog(actualHouse_011.getDog());
 
         // then
         assertNotNull(actualHouse_011);
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         // then
         assertNotNull(actualDog);
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
     }
 
     @Test
@@ -187,13 +187,13 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         printLog(house);
 
         //when
-        DogHouse actualHouse = dogHouseService.save(house);                         // 2->RDBMS
+        DogHouse actualHouse = houseService.save(house);                         // 2->RDBMS
         printLog(actualHouse, "2->RDBMS");
 
         // then
         assertNotNull(actualHouse);
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
     }
 
     @Test
@@ -217,7 +217,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
 
         // then
         assertTrue(dogService.findAll().isEmpty());
-        assertTrue(dogHouseService.findAll().isEmpty());
+        assertTrue(houseService.findAll().isEmpty());
 
     }
 
@@ -238,13 +238,13 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         printLog(actualDog, "1->RDBMS");
 
         //when
-        dogHouseService.delete(house.getId());
+        houseService.delete(house.getId());
 
         // then
         System.err.println(dogService.findAll());
-        System.err.println(dogHouseService.findAll());
+        System.err.println(houseService.findAll());
         assertTrue(dogService.findAll().isEmpty());
-        assertTrue(dogHouseService.findAll().isEmpty());
+        assertTrue(houseService.findAll().isEmpty());
 
     }
 
@@ -277,7 +277,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         assertEquals(expectDog, actualDog);
         assertEquals(expectHouse, actualDog.getHouse());
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
 
     }
 
@@ -307,7 +307,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         // then
         assertEquals(expectDog, actualDog);
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
     }
 
 
@@ -340,7 +340,7 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
         assertEquals(expectDog, actualDog);
         assertEquals(expectHouse, actualDog.getHouse());
         assertEquals(dogService.findAll().size(), 1);
-        assertEquals(dogHouseService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
 
     }
 
@@ -348,16 +348,159 @@ public class OneToOneMappingBidirectionalTest extends AbstractTransactionalJUnit
     void printLog(Object object, String... message) {
         if (object instanceof Dog) {
             Dog dog = (Dog) object;
-            System.err.println("Dog-> ID: " + dog.getId() + ", NAME: " + dog.getUserName() + ", HOUSE: " + dog.getHouse() + ((message.length > 0) ? "       " + message[0] + " >>>>  " : ""));
+            System.err.println("Dog-> ID: " + dog.getId() + ", NAME: " + dog.getUserName() + ", HOUSE: " + dog.getHouse() + " " + ((message.length > 0) ? "       " + message[0] + " >>>>  " : ""));
         }
         if (object instanceof DogHouse) {
             DogHouse dogHouse = (DogHouse) object;
-            System.err.println("DogHouse-> ID: " + dogHouse.getId() + ", NAME: " + dogHouse.getName() + ", DOG: " + dogHouse.getDog() + ((message.length > 0) ? "       " + message[0] + " >>>>  " : ""));
+            System.err.println("DogHouse-> ID: " + dogHouse.getId() + ", NAME: " + dogHouse.getName() + ", DOG: " + dogHouse.getDog() + " " + ((message.length > 0) ? "       " + message[0] + " >>>>  " : ""));
         }
     }
 
     void printLog(String... message) {
         System.err.println(message.length > 0 ? "       " + message[0] + " >>>>  " : "");
     }
+
+
+    ///******************************************** испытание боем *******************************************
+
+    @Test
+    @Rollback
+    public void testCreate_Dog_After_1to2() {
+        //given
+        Dog dog = new Dog();
+        dog.setUserName("DogW");
+        Dog dog_01 = dogService.save(dog);                                     // Dog->RDBMS
+        printLog(dog_01, "1->RDBMS");
+
+        //when
+        Dog expectDog = dogService.findById(dog_01.getId());                   // RDBMS-> Dog
+
+        DogHouse house = new DogHouse();
+        house.setName("HouseW");
+
+        expectDog.setHouse(house);                                             // DogHouse-> Dog
+
+        Dog actualDog = dogService.update(expectDog);                          // RDBMS-> Dog
+
+        // then
+        assertNotNull(actualDog);
+        assertEquals(expectDog, actualDog);
+        assertEquals(dogService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
+    }
+
+
+    @Test
+    @Rollback
+    public void testGet_House_1to2() {
+        //given
+        Dog dog = new Dog();
+        dog.setUserName("DogW");
+        Dog dog_01 = dogService.save(dog);                                     // Dog->RDBMS
+        printLog(dog_01, "1->RDBMS");
+
+        //when
+        Dog expectDog = dogService.findById(dog_01.getId());                   // RDBMS-> Dog
+
+        DogHouse house = new DogHouse();
+        house.setName("HouseW");
+
+        expectDog.setHouse(house);                                             // DogHouse-> Dog
+
+        Dog actualDog = dogService.update(expectDog);                          // Dog->RDBMS
+        printLog(actualDog, "Dog->RDBMS");
+
+        DogHouse house1 = actualDog.getHouse();
+        System.err.println(house1);
+
+        // then
+        assertNotNull(actualDog);
+        assertEquals(expectDog, actualDog);
+        assertEquals(dogService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
+    }
+
+    @Test
+    @Rollback
+    public void testGetUpdate_House_1to2() {
+        //given
+        DogHouse house = new DogHouse();
+        house.setName("Wssff");
+
+        Dog dog = new Dog();
+        dog.setUserName("DogW");
+        dog.setHouse(house);                                             // DogHouse-> Dog
+        Dog expectDog = dogService.update(dog);                          // Dog->RDBMS
+        printLog(expectDog, "Dog->RDBMS");
+
+        //when
+        Dog expectDog_01 = dogService.findById(expectDog.getId());
+
+        DogHouse expectHouse = expectDog_01.getHouse();
+        expectHouse.setName("new House");
+
+        //    update возможно сервисом dogService
+        //    dogService.update(expectDog_01);
+
+        // update возможно сервисом houseService
+        houseService.update(expectHouse);
+
+        // then
+
+        assertEquals(dogService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 1);
+    }
+
+    @Test
+    @Rollback
+    public void testDelete_Dog_House_1to2() {
+        //given
+        DogHouse house = new DogHouse();
+        house.setName("Wssff");
+
+        Dog dog = new Dog();
+        dog.setUserName("DogW");
+        dog.setHouse(house);                                             // DogHouse-> Dog
+        Dog expectDog = dogService.update(dog);                          // Dog->RDBMS
+        printLog(expectDog, "Dog->RDBMS");
+
+        //when
+        Dog expectDog_01 = dogService.findById(expectDog.getId());
+
+        dogService.delete(expectDog_01.getId());
+
+
+        // then
+
+        assertEquals(dogService.findAll().size(), 0);
+        assertEquals(houseService.findAll().size(), 0);
+    }
+
+
+    @Test
+    @Rollback
+    public void testDelete_House_1to2() {
+        //given
+        DogHouse house = new DogHouse();
+        house.setName("Wssff");
+
+        Dog dog = new Dog();
+        dog.setUserName("DogW");
+        dog.setHouse(house);                                             // DogHouse-> Dog
+        Dog expectDog = dogService.update(dog);                          // Dog->RDBMS
+        printLog(expectDog, "Dog->RDBMS");
+
+        //when
+        Dog expectDog_01 = dogService.findById(expectDog.getId());
+        DogHouse house1 = expectDog_01.getHouse();
+        houseService.delete(house1.getId());
+
+
+        // then
+
+        assertEquals(dogService.findAll().size(), 1);
+        assertEquals(houseService.findAll().size(), 0);
+    }
+
 
 }
